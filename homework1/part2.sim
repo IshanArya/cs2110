@@ -1,0 +1,213 @@
+{
+  "version": "1.8.1",
+  "globalBitSize": 1,
+  "clockSpeed": 1,
+  "circuits": [
+    {
+      "name": "umbrella",
+      "components": [
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.misc.Text",
+          "x": 18,
+          "y": 7,
+          "properties": {
+            "Text": "Advice"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.misc.Text",
+          "x": 15,
+          "y": 14,
+          "properties": {
+            "Text": "Cloudy"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.gates.AndGatePeer",
+          "x": 19,
+          "y": 11,
+          "properties": {
+            "Negate 1": "No",
+            "Label location": "NORTH",
+            "Negate 0": "No",
+            "Number of Inputs": "2",
+            "Label": "",
+            "Direction": "EAST",
+            "Bitsize": "1"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.misc.Text",
+          "x": 56,
+          "y": 22,
+          "properties": {
+            "Text": "Ishan Arya\ngtID: 903399427"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.gates.OrGatePeer",
+          "x": 26,
+          "y": 8,
+          "properties": {
+            "Negate 1": "No",
+            "Label location": "NORTH",
+            "Negate 0": "No",
+            "Number of Inputs": "2",
+            "Label": "",
+            "Direction": "EAST",
+            "Bitsize": "1"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.wiring.PinPeer",
+          "x": 10,
+          "y": 8,
+          "properties": {
+            "Label location": "WEST",
+            "Label": "in",
+            "Is input?": "Yes",
+            "Direction": "EAST",
+            "Bitsize": "3"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.wiring.PinPeer",
+          "x": 27,
+          "y": 23,
+          "properties": {
+            "Label location": "EAST",
+            "Label": "out",
+            "Is input?": "No",
+            "Direction": "WEST",
+            "Bitsize": "1"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.wiring.Tunnel",
+          "x": 14,
+          "y": 23,
+          "properties": {
+            "Label": "umbrella",
+            "Direction": "EAST",
+            "Bitsize": "1"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.wiring.Tunnel",
+          "x": 33,
+          "y": 9,
+          "properties": {
+            "Label": "umbrella",
+            "Direction": "WEST",
+            "Bitsize": "1"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.misc.Text",
+          "x": 15,
+          "y": 10,
+          "properties": {
+            "Text": "Windy"
+          }
+        },
+        {
+          "name": "com.ra4king.circuitsim.gui.peers.wiring.SplitterPeer",
+          "x": 13,
+          "y": 9,
+          "properties": {
+            "Label location": "NORTH",
+            "Fanouts": "3",
+            "Input location": "Left/Top",
+            "Label": "",
+            "Bit 2": "2",
+            "Direction": "EAST",
+            "Bit 1": "1",
+            "Bitsize": "3",
+            "Bit 0": "0"
+          }
+        }
+      ],
+      "wires": [
+        {
+          "x": 15,
+          "y": 11,
+          "length": 2,
+          "isHorizontal": true
+        },
+        {
+          "x": 15,
+          "y": 12,
+          "length": 4,
+          "isHorizontal": true
+        },
+        {
+          "x": 15,
+          "y": 13,
+          "length": 2,
+          "isHorizontal": true
+        },
+        {
+          "x": 17,
+          "y": 9,
+          "length": 2,
+          "isHorizontal": false
+        },
+        {
+          "x": 17,
+          "y": 9,
+          "length": 9,
+          "isHorizontal": true
+        },
+        {
+          "x": 17,
+          "y": 13,
+          "length": 1,
+          "isHorizontal": false
+        },
+        {
+          "x": 17,
+          "y": 14,
+          "length": 2,
+          "isHorizontal": true
+        },
+        {
+          "x": 23,
+          "y": 13,
+          "length": 1,
+          "isHorizontal": true
+        },
+        {
+          "x": 23,
+          "y": 24,
+          "length": 4,
+          "isHorizontal": true
+        },
+        {
+          "x": 24,
+          "y": 11,
+          "length": 2,
+          "isHorizontal": true
+        },
+        {
+          "x": 24,
+          "y": 11,
+          "length": 2,
+          "isHorizontal": false
+        },
+        {
+          "x": 30,
+          "y": 10,
+          "length": 3,
+          "isHorizontal": true
+        }
+      ]
+    }
+  ],
+  "revisionSignatures": [
+    "CThlYWZkYzEzMjE3ZjdiMTBkNWU1MTA1NWE2ZTc1NzMwNTNiNmJkNmFmOTZlZTI2NDE4NTM3ZWE1NmEzZWFkZWIJMTU0NzA3MDkyMzM3MAlmNjY1ZjAzYzVjOWFlZDM4YzBjYTZlMTYyOGYwNDUwNjhjOGNhMDAwM2YyOTNlNjliZDQ0MmI5ZTU0MjBjMjhl",
+    "OGVhZmRjMTMyMTdmN2IxMGQ1ZTUxMDU1YTZlNzU3MzA1M2I2YmQ2YWY5NmVlMjY0MTg1MzdlYTU2YTNlYWRlYglkNTEyMmFiMGY2YjJlNDRlNjMyODk1ZWU0ZWRmYjg4YjQzMmZlMmJmYmJmNDg1YzJmY2RjNDI0ZGMyZWZlODUxCTE1NDcwNzEwNDc3MTgJNWNjOGMxYmY3NzcxMzgyMTgzNTA3OGQ1Njk1M2YzOTU1MzE4MTVjODM3MDcxYjhjODBlZjZkNDdlZTQwNjZmMw\u003d\u003d",
+    "ZDUxMjJhYjBmNmIyZTQ0ZTYzMjg5NWVlNGVkZmI4OGI0MzJmZTJiZmJiZjQ4NWMyZmNkYzQyNGRjMmVmZTg1MQk5ZGVmODBhYmUxMzFkNWZiNDY5YzcwNzA0ZjA2MzFlMDQzNDU2ZDcwNzAyNGNlNTIwZjI5ZDJiODNkYjhmMTcwCTE1NDcwNzEwNzE3NDMJYWQ3MTEyNzlmYmZlZWVmZTdjZTE5YWQ0ZDM0MmYxNmQ3OWIzOGQwMDJhNGMwOTcwOWJjMDRmNWJkZGU5Yjg0ZA\u003d\u003d",
+    "OWRlZjgwYWJlMTMxZDVmYjQ2OWM3MDcwNGYwNjMxZTA0MzQ1NmQ3MDcwMjRjZTUyMGYyOWQyYjgzZGI4ZjE3MAkwOTYyZmM2OGQ5MmFiM2JkM2Y3NjZkYmMwM2M2YTgwZjcxZGIyMzEyYmFjMGE0ZWNjNTVlYWJkNjY3NDNiZDFjCTE1NDcwNzEwNzg4NjQJYWQ3MTEyNzlmYmZlZWVmZTdjZTE5YWQ0ZDM0MmYxNmQ3OWIzOGQwMDJhNGMwOTcwOWJjMDRmNWJkZGU5Yjg0ZA\u003d\u003d",
+    "MDk2MmZjNjhkOTJhYjNiZDNmNzY2ZGJjMDNjNmE4MGY3MWRiMjMxMmJhYzBhNGVjYzU1ZWFiZDY2NzQzYmQxYwk2OTYzNzcyYTZhNWJkYTU4NmY0OTc1NWJkN2Q5MmE4ODM0N2U1M2FkNWU0ODQ3OWU4NWM4ZDVjY2UxYWQ3NWQxCTE1NDcwNzI3MjcyNTIJMWE5YjY5MzAzZjYxMDg3YTU2ZWViNTc1OGNkMWIwYTIzZjAwOWY5YWNiYTA5NWUwNzlkOWYwYzA5MGUyY2RmNg\u003d\u003d"
+  ]
+}
