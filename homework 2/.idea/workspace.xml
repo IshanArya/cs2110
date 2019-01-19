@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad148473-148d-4327-8704-2c92c617bcfe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../homework1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitVector.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitVector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitVector.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,7 +25,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bases.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="3360">
               <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="143" selection-end-column="9" />
             </state>
           </provider>
@@ -42,15 +43,15 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BitVector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="538">
-              <caret line="198" column="41" lean-forward="true" selection-start-line="198" selection-start-column="41" selection-end-line="198" selection-end-column="41" />
+            <state relative-caret-position="514">
+              <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
               <folding>
                 <element signature="e#2564#2565#0" expanded="true" />
-                <element signature="e#2595#2596#0" expanded="true" />
+                <element signature="e#2606#2607#0" expanded="true" />
                 <element signature="e#3011#3012#0" expanded="true" />
                 <element signature="e#3054#3055#0" expanded="true" />
                 <element signature="e#3493#3494#0" expanded="true" />
-                <element signature="e#3536#3537#0" expanded="true" />
+                <element signature="e#3535#3536#0" expanded="true" />
                 <element signature="e#4095#4096#0" expanded="true" />
                 <element signature="e#4158#4159#0" expanded="true" />
                 <element signature="e#4766#4767#0" expanded="true" />
@@ -90,7 +91,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -102,6 +102,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -142,18 +143,19 @@
       <workItem from="1547833305217" duration="5364000" />
       <workItem from="1547885351683" duration="282000" />
       <workItem from="1547920368996" duration="1238000" />
-      <workItem from="1547922546474" duration="5656000" />
+      <workItem from="1547922546474" duration="5730000" />
+      <workItem from="1547932516871" duration="58000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15725000" />
+    <option name="totallyTimeSpent" value="15857000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25679544" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26037195" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -192,6 +194,13 @@
     <entry file="file://$PROJECT_DIR$/BitVector.class">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/Bases.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3360">
+          <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="143" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Operations.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -199,24 +208,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bases.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="143" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BitVector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="538">
-          <caret line="198" column="41" lean-forward="true" selection-start-line="198" selection-start-column="41" selection-end-line="198" selection-end-column="41" />
+        <state relative-caret-position="514">
+          <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
           <folding>
             <element signature="e#2564#2565#0" expanded="true" />
-            <element signature="e#2595#2596#0" expanded="true" />
+            <element signature="e#2606#2607#0" expanded="true" />
             <element signature="e#3011#3012#0" expanded="true" />
             <element signature="e#3054#3055#0" expanded="true" />
             <element signature="e#3493#3494#0" expanded="true" />
-            <element signature="e#3536#3537#0" expanded="true" />
+            <element signature="e#3535#3536#0" expanded="true" />
             <element signature="e#4095#4096#0" expanded="true" />
             <element signature="e#4158#4159#0" expanded="true" />
             <element signature="e#4766#4767#0" expanded="true" />

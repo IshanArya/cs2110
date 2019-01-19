@@ -191,11 +191,11 @@ public class BitVector {
     public int size() {
         int reverseCounter = 32;
         int binary = bits;
-        while((binary & (1 << 31)) == 0 && reverseCounter > 0) {
+        while((binary & (1 << 31)) == 0 && reverseCounter > 1) {
             reverseCounter--;
             binary = binary << 1;
         }
 
-        return reverseCounter == 0 ? 1 : reverseCounter;
+        return reverseCounter;
     }
 }
