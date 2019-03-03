@@ -103,6 +103,7 @@ decimalStringToInt
         LDR R2, R6, 0 ; load return value of MULT into R2
         ADD R6, R6, 3 ; revert R6 to lv 3
         LDR R3, R5, 4 ; store address of decimal string into R3
+        LDR R1, R5, -2 ; load R1 with counter value
         ADD R3, R3, R1 ; get address of character at location of counter
         LDR R3, R3, 0 ; get character at index "counter" in string
         ADD R3, R3, -16
