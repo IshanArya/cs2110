@@ -2,7 +2,7 @@
 ;;CS 2110 - Spring 2019
 ;;Homework 7 - Recursive Reverse Linked List
 ;;=============================================================
-;;Name:
+;;Name: Ishan Arya
 ;;=============================================================
 
 .orig x3000
@@ -28,6 +28,47 @@
 reverse
 ;;=============================================================
 ;; YOUR CODE GOES HERE
+
+    ADD R6, R6, -4 ; increment SP to location of lv 1
+    STR R7, R6, 2 ; store return address
+    STR R5, R6, 1; store old FP
+    ADD R5, R6, 0 ; set new FP
+    ADD R6, R6, -1 ; increment SP TO location of lv 2
+    STR R0, R6, 1 ; save R0 in lv1
+    STR R1, R6, 0 ; save R1 in lv2
+
+    LDR R0, R5, 4 ; load head node into R0
+    BRZ RET_HEAD ; return head if head is null
+    LDR R0, R0, 0 ; load head.next into R0
+    BRZ RET_HEAD ; return head if head.next is null
+
+    ADD R6, R6, -1 ; increment SP
+    STR R0, R6, 0 ; store head.next as arg 1
+    JSR reverse ; recurse with head.next
+
+    LDR R0, R5, 4 ; load head node into R0
+    LDR R1, R0, 0 ; load head.next into R1
+    STR R0, R1, 0 ; set head.next.next = head
+    AND R1, R1, 0 ; nullify R1
+    STR R1, R0, 0 ; set head.next = null
+
+    LDR R1, R6, 0 ; load new_head into R1
+    STR R1, R5, 3 ; store new_head at return value
+
+    CLEANUP
+        LDR R0, R5, 0
+        LDR R1, R5, -1
+        ADD R6, R5, 3 ; set SP to location of return value
+        LDR R5, R6, -2 ; set FP to old FP value
+        LDR R7, R6, -1 ; set R7 to return address
+        RET
+
+    RET_HEAD
+        LDR R0, R5, 4 ; load head node into R0
+        STR R0, R5, 3 ; store head in return value
+        BR CLEANUP ; exit
+    
+    
 
 ;;=============================================================
 

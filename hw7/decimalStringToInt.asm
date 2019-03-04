@@ -64,6 +64,12 @@ decimalStringToInt
     STR R7, R6, 2 ; store return address
     STR R5, R6, 1; store old FP
     ADD R5, R6, 0 ; store new FP
+    ADD R6, R6, -3 ; increment SP TO location of lv 4
+    STR R0, R6, 3 ; save R0 in lv1
+    STR R1, R6, 2 ; save R1 in lv2
+    STR R2, R6, 1 ; save R2 in lv3
+    STR R3, R6, 0 ; save R3 in lv4
+
 
 ;; call LENGTH subroutine
     ADD R6, R6, -1 ; increment SP
@@ -73,26 +79,26 @@ decimalStringToInt
     LDR R0, R6, 0 ; store length of decimal string in R0
     NOT R0, R0 ; turning length negative
     ADD R0, R0, 1 ; turned length negative
-    ADD R6, R6, 2 ; go to local variable place 1
+    ADD R6, R6, 1 ; go to local variable place 5
     STR R0, R6, 0 ; store negative length of decimal string here
 
     AND R1, R1, 0 ; make R1 the counter
     ADD R6, R6, -1 ; increment SP
-    STR R1, R6, 0 ; store "ret" at lv place 2
+    STR R1, R6, 0 ; store "ret" at lv place 6
     ADD R1, R1, -1 ; initialize counter i
     ADD R6, R6, -1 ; increment SP
-    STR R1, R6, 0 ; store counter at lv place 3
+    STR R1, R6, 0 ; store counter at lv place 7
     LOOPDECIMAL
         ;; loop conditional
-        LDR R1, R5, -2 ; load R1 with counter value
-        LDR R0, R5, 0 ; load R0 with negative string length
+        LDR R1, R5, -6 ; load R1 with counter value
+        LDR R0, R5, -4 ; load R0 with negative string length
         ADD R1, R1, 1 ; increment counter
-        STR R1, R5, -2 ; update counter value in memory
+        STR R1, R5, -6 ; update counter value in memory
         ADD R2, R1, R0 ; check if counter >= string length
         BRZP ENDDECIMAL ; if it is, go to end phase
         
         ;; loop body
-        LDR R2, R5, -1 ; load "ret" into R2
+        LDR R2, R5, -5 ; load "ret" into R2
         AND R3, R3, 0 ; nullify R3
         ADD R3, R3, 10 ; store 10 in R3
         ADD R6, R6, -1 ; increment counter
@@ -101,21 +107,25 @@ decimalStringToInt
         STR R2, R6, 0 ; store ret in arg 1
         JSR MULT ; jump to MULT subroutine
         LDR R2, R6, 0 ; load return value of MULT into R2
-        ADD R6, R6, 3 ; revert R6 to lv 3
+        ADD R6, R6, 3 ; revert R6 to lv 7
         LDR R3, R5, 4 ; store address of decimal string into R3
-        LDR R1, R5, -2 ; load R1 with counter value
+        LDR R1, R5, -6 ; load R1 with counter value
         ADD R3, R3, R1 ; get address of character at location of counter
         LDR R3, R3, 0 ; get character at index "counter" in string
         ADD R3, R3, -16
         ADD R3, R3, -16
         ADD R3, R3, -16 ; convert character to number by decrementing by 48
         ADD R2, R3, R2 ; add number to "ret"
-        STR R2, R5, -1 ; store "ret" at lv 2
+        STR R2, R5, -5 ; store "ret" at lv 6
         BR LOOPDECIMAL ; loop again
 
     ENDDECIMAL
-        LDR R2, R5, -1 ; load "ret" into R2
+        LDR R2, R5, -5 ; load "ret" into R2
         STR R2, R5, 3 ; store "ret" in return position
+        LDR R0, R5, 0
+        LDR R1, R5, -1
+        LDR R2, R5, -2
+        LDR R3, R5, -3
         BR CLEANUP ; cleanup routine and return
 
 
