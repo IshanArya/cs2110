@@ -9,8 +9,6 @@ char *fgets_no_newline(char *buffer, int buf_length, FILE *stream) {
         return 0;
     }
     int line_length = strlen(buffer);
-    printf("Line Length: %d\n", line_length);
-    printf("Final Character: %c\n", buffer[line_length - 1]);
     if (line_length > 0 && buffer[line_length - 1] == '\n') {
             buffer[line_length - 1] = '\0';
     }

@@ -2,22 +2,47 @@
 #include "useful_strings.h"
 
 char getUserOption(void);
+void printToDoList(void);
 
 int main(int argc, char *argv[]) {
 
-    printf("Number of arguments: %d\n", argc);
-    printf("First arg: %s\n", *argv);
+    if(argc > 2) {
+        fprintf(stderr, "%s", ERROR_USAGE);
+        exit(1);
+    }
+    if(argc == 2) {
+        FILE *saveFile = fopen(argv[1], "r");
+        if(saveFile == NULL) {
+            fprintf(stderr, FILE_NOT_FOUND, argv[1]);
+            exit(1);
+        }
+        while(read_todo_list_item(saveFile) == 1) {
+        }
+    }
 
     char menuOption;
 
     while ((menuOption = getUserOption()) != '6') {
-        if(menuOption == 0) {
-            printf("%s", INVALID_CHOICE);
-            continue;
+        switch (menuOption) {
+            case '1':
+                printToDoList();
+                break;
+            case '2':
+                break;
+            case '3':
+                break;
+            case '4':
+                break;
+            case '5':
+                break;
+            default:
+                printf("%s", INVALID_CHOICE);
+                continue;
+                break;
         }
-        printf("User Input: %c\n\n", menuOption);
     }
 
+    exit(0);
     return 0;
 }
 
@@ -26,7 +51,7 @@ char getUserOption(void) {
     printf("%s", MAIN_MENU_HEADER);
     printf("%s", QUERY);
     printf("%s", OPTIONS_LIST);
-    printf("> ");
+    printf("%s", GRAB_INPUT);
 
     char input[3];
     if(fgets(input, 3, stdin) == NULL) {
@@ -46,5 +71,20 @@ char getUserOption(void) {
     return input[0];
 }
 
+void printToDoList(void) {
+    printf("%s", TODO_LIST_HEADER);
 
+    for (int i = 0; i < Todo_list_length; i++) {
+        struct todo_list_item_t currentItem = Todo_list[i];
+        printf("%s\n\n", currentItem.title);
+        if(currentItem.is_done == 1) {
+            printf("%s", COMPLETED);
+        } else {
+            printf("Due: %02d/%02d/%04d\n", currentItem.due_month, currentItem.due_day, currentItem.due_year);
+        }
+
+        printf("Description: %s\n", currentItem.description);
+        printf("%s", LINE_BREAK);
+    }
+}
 

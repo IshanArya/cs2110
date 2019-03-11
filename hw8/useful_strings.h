@@ -10,7 +10,7 @@
 #define OPTIONS_LIST  "1) Print my To-do List\n2) Add a To-do List Item\n3) Mark an item completed\n4) Remove all completed items\n5) Save as\n6) Quit\n\n"
 #define INVALID_CHOICE "Invalid choice!\n"
 #define QUERY "What would you like to do?\n\n"
-#define FILE_NOT_FOUND "ERROR: File, <INSERT FILE NAME HERE>, does not exist!\n"
+#define FILE_NOT_FOUND "ERROR: File, %s, does not exist!\n"
 #define ERROR_USAGE "ERROR: Usage: todolist (save_file)\n"
 
 /* Print All To-Do List Items Screen */
