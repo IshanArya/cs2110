@@ -6,6 +6,7 @@ void printToDoList(void);
 char addItem(void);
 void markCompleted(void);
 int removeCompleted(void);
+void saveList(void);
 
 int main(int argc, char *argv[]) {
 
@@ -42,6 +43,7 @@ int main(int argc, char *argv[]) {
                 printf("Success! %d items removed!\n", removeCompleted());
                 break;
             case '5':
+                saveList();
                 break;
             default:
                 printf("%s", INVALID_CHOICE);
@@ -135,5 +137,34 @@ int removeCompleted(void) {
 
     Todo_list_length -= numberRemoved;
     return numberRemoved;
+}
+
+void saveList(void) {
+    printf("%s", SAVE_FILE_HEADER);
+    printf("%s", INPUT_FILE_NAME);
+
+    printf("%s", GRAB_INPUT);
+
+    char input[128];
+    if (fgets_no_newline(input, 128, stdin) == NULL) {
+        return;
+    }
+
+    FILE *saveFile = fopen(input, "w");
+    if(saveFile == NULL) {
+        return;
+    }
+
+    for (int i = 0; i < Todo_list_length; i++) {
+        struct todo_list_item_t currentItem = Todo_list[i];
+        fprintf(saveFile, "%s\n", currentItem.title);
+        fprintf(saveFile, "%s\n", currentItem.description);
+        fprintf(saveFile, "%d\n", currentItem.is_done);
+        fprintf(saveFile, "%d\n", currentItem.due_day);
+        fprintf(saveFile, "%d\n", currentItem.due_month);
+        fprintf(saveFile, "%d\n", currentItem.due_year);
+    }
+
+    fclose(saveFile);
 }
 
