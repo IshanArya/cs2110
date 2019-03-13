@@ -11,13 +11,13 @@ void saveList(void);
 int main(int argc, char *argv[]) {
 
     if(argc > 2) {
-        fprintf(stderr, "%s", ERROR_USAGE);
+        fprintf(stdout, "%s", ERROR_USAGE);
         exit(1);
     }
     if(argc == 2) {
         FILE *saveFile = fopen(argv[1], "r");
         if(saveFile == NULL) {
-            fprintf(stderr, FILE_NOT_FOUND, argv[1]);
+            fprintf(stdout, FILE_NOT_FOUND, argv[1]);
             exit(1);
         }
         while(read_todo_list_item(saveFile) == 1) {
