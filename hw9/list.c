@@ -1,7 +1,7 @@
 /**
  * CS 2110 - Spring 2019 - Homework #9
  *
- * @author YOUR NAME HERE
+ * @author Ishan Arya
  *
  * list.c: Complete the functions!
  */
@@ -34,8 +34,15 @@ static inline ListNode *create_node(Dog *data);
   */
 static ListNode* create_node(Dog *data)
 {
-    UNUSED_PARAMETER(data);
-    return NULL;
+    ListNode *newNode = malloc(sizeof(ListNode));
+    if(newNode == NULL) {
+      return NULL;
+    }
+    
+    newNode -> next = NULL;
+    newNode -> data = data;
+
+    return newNode;
 }
 
 /** create_list
@@ -47,9 +54,16 @@ static ListNode* create_node(Dog *data)
   *
   * @return a pointer to a new struct list or NULL on failure
   */
-List *create_list(void)
-{
-    return NULL;
+List *create_list(void) {
+    List *newList = malloc(sizeof(List));
+    if(newList == NULL) {
+      return NULL;
+    }
+
+    newList -> head = NULL;
+    newList -> size = 0;
+
+    return newList;
 }
 
 /** push_front
@@ -62,9 +76,19 @@ List *create_list(void)
   */
 int push_front(List *listToPrependTo, Dog *data)
 {
-    UNUSED_PARAMETER(listToPrependTo);
-    UNUSED_PARAMETER(data);
-    return 0;
+    if(listToPrependTo == NULL) {
+      return 0;
+    }
+
+    ListNode *newHead = create_node(data);
+    if(newHead == NULL) {
+      return 0;
+    }
+    newHead->next = (listToPrependTo->head);
+    listToPrependTo -> head = newHead;
+    (listToPrependTo->size)++;
+
+    return 1;
 }
 
 /** push_back
@@ -75,11 +99,29 @@ int push_front(List *listToPrependTo, Dog *data)
   * @param data the data to add to the List.
   * @return 0 if the List is NULL, 1 if successful.
   */
-int push_back(List *listToAppendTo, Dog *data)
-{
-    UNUSED_PARAMETER(listToAppendTo);
-    UNUSED_PARAMETER(data);
-    return 0;
+int push_back(List *listToAppendTo, Dog *data) {
+    if (listToAppendTo == NULL) {
+        return 0;
+    }
+
+    ListNode *newEnd = create_node(data);
+    if (newEnd == NULL) {
+        return 0;
+    }
+    if(listToAppendTo->size == 0) { //case when list is empty
+      listToAppendTo->head = newEnd;
+      listToAppendTo->size++;
+      return 1;
+    }
+    
+    ListNode *endNode = listToAppendTo->head;
+
+    while(endNode->next != NULL) {
+      endNode = endNode->next;
+    }
+    endNode->next = newEnd;
+    listToAppendTo->size++;
+    return 1;
 }
 
 /** add_at_index
