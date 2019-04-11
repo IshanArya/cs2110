@@ -17,10 +17,106 @@ typedef unsigned char u8;
 //                       MODE3 MACROS
 // ---------------------------------------------------------------------------
 #define OFFSET(r, c, rowlen) ((c)+(rowlen)*(r))
+#define ENCODE_COORDINATES(x, y) ((y)* WIDTH + (x))
+#define DECODE_Y(a) ((a) / WIDTH)
+#define DECODE_X(a) ((a) % WIDTH)
 
 #define REG_DISPCNT  *(volatile unsigned short *) 0x4000000
 #define MODE3 3
 #define BG2_ENABLE (1<<10)
+#define OBJ_ENABLE (1<<12)
+
+typedef struct {
+    u16 attr0;
+    u16 attr1;
+    u16 attr2;
+    u16 fill;
+} OamEntry;
+
+#define SPRITEMEM ((OamEntry *)0x7000000)
+
+typedef struct {
+    u16 tileimg[8192];
+} charblock;
+#define CHARBLOCKBASE ((charblock *)0x6000000)
+
+#define SPRITEDATA ((u16 *)(0x6010000))
+#define SPRITEPAL ((u16 *)0x5000200)
+#define MODE1D (1 << 6)
+
+// ATTR0
+
+// 0-7 Row position of the top of the sprite.
+
+// 8-9 Object Mode
+#define ATTR0_REG (0 << 8)
+#define ATTR0_AFF (1 << 8)
+#define ATTR0_HIDE (2 << 8)
+#define ATTR0_AFF_DBL (3 << 8)
+
+// 10-11 Graphics Mode for special effects
+#define ATTR0_BLEND (1 << 10)  // Forbidden to use both of these
+#define ATTR0_WIN (2 << 10)
+
+// 12 Mosaic Effect
+#define ATTR0_MOSAIC (1 << 12)
+
+// 13 Color Mode
+#define ATTR0_4BPP 0          // 16 colors
+#define ATTR0_8BPP (1 << 13)  // 256 colors
+
+// 14-15 Shape
+#define ATTR0_SQUARE 0
+#define ATTR0_WIDE (1 << 14)
+#define ATTR0_TALL (2 << 14)
+
+// ATTR1
+
+// 0-8 Column position of left hand side of sprite
+
+// 9-13 Valid if Affine Flag (Attribute 0 Bit 8)
+// Defines which OAM_AFF_ENTY this sprite uses.
+
+// 12-13
+#define ATTR1_NOFLIP 0
+#define ATTR1_HFLIP (1 << 12)
+#define ATTR1_VFLIP (1 << 13)
+// Used only if the Affine Flag (Attribute 0 Bit 8) is clear
+
+// 14-15 Size...Together with the shape bits Attribute 0 Bits 14-15
+// these determine the sprite's real size, see table:
+
+//                                          col x row
+/*-------------------------------------------------------------
+ *
+ *       Size                   00      01      10      11
+ *   Shape
+ *              00              8x8     16x16   32x32   64x64
+ *         Wide 01              16x8    32x8    32x16   64x32
+ *         Tall 10              8x16    8x32    16x32   32x64
+ *------------------------------------------------------------*/
+#define ATTR1_SIZE8 0
+#define ATTR1_SIZE16 (1 << 14)
+#define ATTR1_SIZE32 (2 << 14)
+#define ATTR1_SIZE64 (3 << 14)
+
+// ATTR2
+
+// 0-9 Base tile-index of sprite. Note that in bitmap modes this must
+// be 512 or higher.
+
+// 10-11 Priority. Higher priorities are drawn first (and therefore
+// can be covered by later sprites and backgrounds). Sprites cover
+// backgrounds of the same priority, and for sprites of the same
+// priority, the higher OBJ_ATTRs are drawn first.
+#define ATTR2_PRI0 0
+#define ATTR2_PRI1 (1 << 10)
+#define ATTR2_PRI2 (2 << 10)
+#define ATTR2_PRI3 (3 << 10)
+
+// 12-15 Palette-bank to use when in 16-color mode. Has no effect if
+// the color mode flag Attribute 0 Bit 12 is set.
+#define ATTR2_PALETTE_BANK(pbn) ((pbn) << 12)
 
 #define COLOR(r, g, b) ((r) | (g)<<5 | (b)<<10)
 #define WHITE COLOR(31,31,31)
@@ -55,13 +151,14 @@ extern volatile unsigned short *videoBuffer;
 #define BUTTON_L		(1<<9)
 
 #define BUTTONS *(volatile u32 *) 0x4000130
-#define KEY_DOWN(key, buttons) (~(buttons) & (key))
+#define KEYS_DOWN(keys, buttons) ((~(buttons) & (keys)) > 0)
 
 // TA-TODO: COMPLETE THIS MACRO.
 // Remember that a button is recently pressed if it wasn't pressed in the last
 // input (oldButtons) but is pressed in the current input. Use the KEY_DOWN
 // macro to check if the button was pressed in the inputs.
-#define KEY_JUST_PRESSED(key, buttons, oldbuttons)
+#define KEY_JUST_PRESSED(key, buttons, oldbuttons) \
+    ((KEYS_DOWN((key), (buttons))) && !(KEYS_DOWN((key), (oldbuttons))))
 
 // ---------------------------------------------------------------------------
 //                       DMA
@@ -137,7 +234,8 @@ int randint(int min, int max);
 void setPixel(int x, int y, u16 color);
 void drawRectDMA(int x, int y, int width, int height, volatile u16 color);
 void drawFullScreenImageDMA(const u16 *image);
-void drawImageDMA(int x, int y, int width, int height, u16 *image);
+void drawImageDMA(int x, int y, int width, int height, const u16 *image);
+void drawPartBackground(int x, int y, int width, int height, const u16 *image);
 void fillScreenDMA(volatile u16 color);
 void drawChar(int col, int row, char ch, u16 color);
 void drawString(int col, int row, char *str, u16 color);

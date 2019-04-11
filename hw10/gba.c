@@ -38,7 +38,7 @@ void setPixel(int x, int y, u16 color) {
 void drawRectDMA(int x, int y, int width, int height, volatile u16 color) {
     for (int i = 0; i < height; i++) {
         DMA[3].src = &color;
-        DMA[3].dst = &videoBuffer[OFFSET(y + i, x, WIDTH)];
+        DMA[3].dst = videoBuffer + ENCODE_COORDINATES(x, y + i);
         DMA[3].cnt = width | DMA_ON | DMA_SOURCE_FIXED;
     }
 }
@@ -49,11 +49,20 @@ void drawFullScreenImageDMA(const u16 *image) {
     DMA[3].cnt = DMA_16 | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_INCREMENT;
 }
 
-void drawImageDMA(int x, int y, int width, int height, u16 *image) {
+void drawImageDMA(int x, int y, int width, int height, const u16 *image) {
     for (int i = 0; i < height; i++) {
-        DMA[3].src = &image[OFFSET(i, 0, width)];
-        DMA[3].dst = &videoBuffer[OFFSET(y + i, x, WIDTH)];
+        DMA[3].src = image + OFFSET(i, 0, width);
+        DMA[3].dst = videoBuffer + ENCODE_COORDINATES(x, y + i);
         DMA[3].cnt = width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_INCREMENT;
+    }
+}
+
+void drawPartBackground(int x, int y, int width, int height, const u16 *image) {
+    for (int i = y; i < y + height; i++) {
+        DMA[3].src = image + ENCODE_COORDINATES(x, i);
+        DMA[3].dst = videoBuffer + ENCODE_COORDINATES(x, i);
+        DMA[3].cnt =
+            width | DMA_ON | DMA_DESTINATION_INCREMENT | DMA_SOURCE_INCREMENT;
     }
 }
 

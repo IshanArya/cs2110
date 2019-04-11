@@ -2,6 +2,10 @@
 #define DRAW_H
 
 #include "logic.h"
+#include "myLib.h"
+
+
+void initializeSprites(void);
 
 // This function will be used to draw everything about the state of your app
 // including the background and whatnot.

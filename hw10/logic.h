@@ -3,38 +3,33 @@
 
 #include "gba.h"
 
-typedef enum { NORTH, SOUTH, EAST, WEST } Direction;
+#include <stdio.h>
+#include <stdlib.h>
+#include "myLib.h"
+
+typedef enum { NW, NE, SW, SE } Direction;
+
+
+
 
 typedef struct {
     int x;
     int y;
-    Direction direction;
 } Player;
 
 typedef struct {
     int x;
     int y;
     Direction direction;
-} Monster;
+} Rocket;
 
 typedef struct {
     // Store whether or not the game is over in this member:
     int gameOver;
 
-    /*
-    * TA-TODO: Add any logical elements you need to keep track of in your app.
-    *
-    * For example, for a Snake game, those could be:
-    *
-    * Snake snake;
-    * Food foods[10];
-    * int points;
-    *
-    */
-
-    Monster *monsters;
-    Player main;
-    int points;
+    Rocket rocket;
+    Player player;
+    char lives;
 
 } AppState;
 

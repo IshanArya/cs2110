@@ -1,0 +1,21 @@
+# Colors
+
+- Green: #8EC050
+- Dirty Green: #819F3D
+- Speckle Green: #4D6F5A
+- Ground: #F7DE92
+- Pebbles: #E59E71
+- Light Brown: #756049
+- Dark Brown: #4A3F34
+- Cool Black: #2C333A
+- Teal: #3C7374
+- Light Teal: #65A38F
+- Treen Green 1: #85A39E
+- Tree Green 2: #ADC299
+- Tree Green 3: #D9E086
+- Tree Light Brown: #F3BD8A
+- Tree Dark Brown: #997970
+- Tree Brown: #DF967E
+- Apple Dark Red: #7B302F
+- Apple Light Red: #9C4744
+- Skin: #f2deaa
