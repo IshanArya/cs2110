@@ -43,7 +43,7 @@ static void set_canary(metadata_t* block) {
     *endCanary = canary;
 }
 
-static metadata_t* find_right(metadata_t* given) {
+static metadata_t* find_right(metadata_t* given) { //assumes given is not in the size_list
     metadata_t *current = size_list;
     while (current != NULL) {
         if(given->size < current->size) {
@@ -56,7 +56,7 @@ static metadata_t* find_right(metadata_t* given) {
     return NULL;
 }
 
-static metadata_t* find_left(metadata_t *given) {
+static metadata_t* find_left(metadata_t *given) { //assumes given is not in the size_list
     if(size_list == NULL || size_list->size > given->size) {
         return NULL;
     }
@@ -69,10 +69,59 @@ static metadata_t* find_left(metadata_t *given) {
     return current;
 }
 
-static void add_to_size_list(metadata_t *add_block) {}
+static void add_to_size_list(metadata_t *add_block) {
+    if(size_list == NULL) {
+        size_list = add_block;
+        size_list->next = NULL;
+    }
+    metadata_t *left = find_left(add_block);
+
+    if(left == NULL) {
+        add_block->next = size_list;
+        size_list = add_block;
+        return;
+    }
+
+    add_block->next = left->next;
+    left->next = add_block;
+}
+
+static void remove_from_size_list(metadata_t *remove_block) {
+    if(size_list == remove_block) {
+        size_list = remove_block->next;
+        return;
+    }
+    metadata_t *current = size_list;
+    while (current != NULL) {
+        if (current->next == remove_block) {
+            current->next = remove_block->next;
+            return;
+        }
+
+        current = current->next;
+    }
+}
 
 static void merge(metadata_t* left, metadata_t* right) {
+    left->size += right->size + TOTAL_METADATA_SIZE;
+    set_canary(left);
+}
 
+/**
+ * @param block = the block to split
+ * @param size = the size requested by the user
+**/
+static void split_block(metadata_t *block, size_t size) {
+    remove_from_size_list(block);
+    metadata_t *newBlock = block + size + TOTAL_METADATA_SIZE;
+    newBlock->next = NULL;
+    newBlock->size = block->size - size - TOTAL_METADATA_SIZE;
+    set_canary(newBlock);
+    add_to_size_list(newBlock);
+
+    block->size = size;
+    block->next = NULL;
+    set_canary(block);
 }
 
 void *my_malloc(size_t size) {
