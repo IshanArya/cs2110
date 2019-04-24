@@ -36,25 +36,28 @@ enum my_malloc_err my_malloc_errno;
  * See PDF for documentation
  */
 
+
+
+
 static void set_canary(metadata_t* block) {
     unsigned long canary = ((uintptr_t)block ^ CANARY_MAGIC_NUMBER) + 1890;
     block->canary = canary;
-    unsigned long *endCanary = (block + sizeof(metadata_t) + block->size);
+    unsigned long *endCanary = (unsigned long *)((uint8_t *)(block + 1) + block->size);
     *endCanary = canary;
 }
 
-static metadata_t* find_right(metadata_t* given) { //assumes given is not in the size_list
-    metadata_t *current = size_list;
-    while (current != NULL) {
-        if(given->size < current->size) {
-            return current;
-        }
+// static metadata_t* find_right(metadata_t* given) { //assumes given is not in the size_list
+//     metadata_t *current = size_list;
+//     while (current != NULL) {
+//         if(given->size < current->size) {
+//             return current;
+//         }
 
-        current = current->next;
-    }
+//         current = current->next;
+//     }
 
-    return NULL;
-}
+//     return NULL;
+// }
 
 static metadata_t* find_left(metadata_t *given) { //assumes given is not in the size_list
     if(size_list == NULL || size_list->size > given->size) {
@@ -73,6 +76,7 @@ static void add_to_size_list(metadata_t *add_block) {
     if(size_list == NULL) {
         size_list = add_block;
         size_list->next = NULL;
+        return;
     }
     metadata_t *left = find_left(add_block);
 
@@ -104,33 +108,70 @@ static void remove_from_size_list(metadata_t *remove_block) {
 
 static void merge(metadata_t* left, metadata_t* right) {
     left->size += right->size + TOTAL_METADATA_SIZE;
-    set_canary(left);
+}
+
+static metadata_t *getMerged(metadata_t* check) {
+    metadata_t *current = size_list;
+    while (current != NULL) {
+        metadata_t *next = current->next;
+        void *nextSpace =
+            (uint8_t *)current + current->size + TOTAL_METADATA_SIZE;
+        if (check == nextSpace) {
+            remove_from_size_list(current);
+            merge(current, check);
+            check = current;
+            check->next = NULL;
+        }
+        nextSpace = (uint8_t *)check + check->size + TOTAL_METADATA_SIZE;
+
+        if (current == nextSpace) {
+            remove_from_size_list(current);
+            merge(check, current);
+        }
+
+        current = next;
+    }
+
+    return check;
 }
 
 /**
  * @param block = the block to split
  * @param size = the size requested by the user
 **/
-static void split_block(metadata_t *block, size_t size) {
+static metadata_t *split_block(metadata_t *block, size_t size) {
     remove_from_size_list(block);
-    metadata_t *newBlock = block + size + TOTAL_METADATA_SIZE;
-    newBlock->next = NULL;
-    newBlock->size = block->size - size - TOTAL_METADATA_SIZE;
-    set_canary(newBlock);
-    add_to_size_list(newBlock);
-
-    block->size = size;
+    size_t splitSize = block->size - size - TOTAL_METADATA_SIZE;
+    metadata_t *newBlock = (metadata_t *)((uint8_t *)block + splitSize + TOTAL_METADATA_SIZE);
     block->next = NULL;
+    block->size = splitSize;
     set_canary(block);
+    add_to_size_list(block);
+
+    newBlock->size = size;
+    newBlock->next = NULL;
+
+    return newBlock;
+}
+
+static metadata_t *getNewMemory(void) {
+    metadata_t *newMemory = my_sbrk(SBRK_SIZE);
+    if(newMemory == NULL) {
+        return NULL;
+    }
+    newMemory->size = SBRK_SIZE - TOTAL_METADATA_SIZE;
+    newMemory->next = NULL;
+
+    return newMemory;
 }
 
 void *my_malloc(size_t size) {
-    int numberOfBytes = sizeof(size) * sizeof(size_t);
-    if(numberOfBytes == 0) {
+    my_malloc_errno = NO_ERROR;
+    if(size == 0) {
         my_malloc_errno = NO_ERROR;
         return NULL;
     }
-    if(numberOfBytes > SBRK_SIZE - TOTAL_METADATA_SIZE) {
+    if(size > SBRK_SIZE - TOTAL_METADATA_SIZE) {
         my_malloc_errno = SINGLE_REQUEST_TOO_LARGE;
         return NULL;
     }
@@ -138,32 +179,94 @@ void *my_malloc(size_t size) {
     metadata_t *current = size_list;
     while(current != NULL) {
         if(current->size == size) {
-
+            remove_from_size_list(current);
+            current->next = NULL;
+            set_canary(current);
+            return (current + 1);
         }
+
+        if(current->size - MIN_BLOCK_SIZE > size) {
+            current = split_block(current, size);
+            set_canary(current);
+            return (current + 1);
+        }
+        current = current->next;
     }
+
+    metadata_t *newMemory = getNewMemory();
+    if(newMemory == NULL) {
+        my_malloc_errno = OUT_OF_MEMORY;
+        return NULL;
+    }
+    newMemory = getMerged(newMemory);
+    add_to_size_list(newMemory);
+
+    return my_malloc(size);
 }
 
 /* REALLOC
  * See PDF for documentation
  */
 void *my_realloc(void *ptr, size_t size) {
-    UNUSED_PARAMETER(ptr);
-    UNUSED_PARAMETER(size);
-    return NULL;
+    if(ptr == NULL) {
+        return my_malloc(size);
+    }
+    metadata_t *block = (metadata_t *)ptr - 1;
+    unsigned long *endCanary =
+        (unsigned long *)((uint8_t *)(block + 1) + block->size);
+
+    if (block->canary != *endCanary) {
+        my_malloc_errno = CANARY_CORRUPTED;
+        return NULL;
+    }
+
+    if(size == 0) {
+        my_free(ptr);
+        return NULL;
+    }
+
+    void *newMemory = my_malloc(size);
+    metadata_t *newMemoryMetadata = (metadata_t *)newMemory - 1;
+    size_t copyingSize = block->size > newMemoryMetadata->size ? newMemoryMetadata->size : block->size;
+    memcpy(newMemory, ptr, copyingSize);
+    my_free(ptr);
+    return newMemory;
 }
 
 /* CALLOC
  * See PDF for documentation
  */
 void *my_calloc(size_t nmemb, size_t size) {
-    UNUSED_PARAMETER(nmemb);
-    UNUSED_PARAMETER(size);
-    return NULL;
+    void *newMemory = my_malloc(nmemb * size);
+    if(newMemory == NULL) {
+        return NULL;
+    }
+
+    metadata_t *block = (metadata_t *)newMemory - 1;
+
+    memset(newMemory, 0, block->size);
+
+    return newMemory;
 }
 
 /* FREE
  * See PDF for documentation
  */
 void my_free(void *ptr) {
-    UNUSED_PARAMETER(ptr);
+    my_malloc_errno = NO_ERROR;
+    if(ptr == NULL) {
+        return;
+    }
+    metadata_t *block = (metadata_t *)ptr - 1;
+
+    unsigned long *endCanary =
+        (unsigned long *)((uint8_t *)(block + 1) + block->size);
+
+    if(block->canary != *endCanary) {
+        my_malloc_errno = CANARY_CORRUPTED;
+        return;
+    }
+
+    block = getMerged(block);
+    add_to_size_list(block);
 }
